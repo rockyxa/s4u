@@ -1,6 +1,11 @@
-#s4u.se/
+#s4u
 #PYTHON VERSION IS 2.5.4
-import os, zipfile
+#TODO: 
+# Tv-serier
+# Fallback om den inte hittar imdb-id?
+# Laborera med värdet från heuristiken
+
+import os
 
 #API_URL = 'http://s4u.se/xml.php?q=%s'
 API_URL = 'http://api.s4u.se/beta/DemoKey/xml/movie/imdb/%s'
@@ -81,7 +86,7 @@ class s4uAgentMovies(Agent.Movies):
     Log("Filetype: %s" % filetype)
 	
 	#DOWNLOAD FILE
-    if bestScore > 85: #JUSTERA DETTA SEN
+    if bestScore > 85: #LABORERA MED DETTA SEN
       try:
         Log('Update: Downloading sub from %s' % bestFileToDownload)  
         subFile = HTTP.Request(bestFileToDownload)    
