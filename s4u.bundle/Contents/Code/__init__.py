@@ -63,6 +63,7 @@ class s4uAgentMovies(Agent.Movies):
     bestScore = 0
     bestFileToDownload = ""
     bestReleaseName = ""
+    filetype = ""
     
     xmlRes = XML.ElementFromURL(xmlUrl, cacheTime=60)
     Log("Update: xmlRes: %s" % xmlRes)
@@ -78,7 +79,7 @@ class s4uAgentMovies(Agent.Movies):
         bestReleaseName = releasename
         bestFileToDownload = file
       Log("Score: %s" % score)
-      
+        
     Log("Result-------------------")
     Log("Best score: %s" % bestScore)
     Log("Releasename: %s" % bestReleaseName)
@@ -89,8 +90,7 @@ class s4uAgentMovies(Agent.Movies):
     if bestScore > 85: #LABORERA MED DETTA SEN
       try:
         Log('Update: Downloading sub from %s' % bestFileToDownload)  
-        subFile = HTTP.Request(bestFileToDownload)    
-        #subFile = HTTP.Request("http://www.rockyxa.se/tester/text.srt",headers={'Accept-Encoding':''}).content         
+        subFile = HTTP.Request(bestFileToDownload)            
       except:
         Log('Update: Failed to download sub from %s' % bestFileToDownload)    
                   
@@ -100,3 +100,5 @@ class s4uAgentMovies(Agent.Movies):
             p.subtitles[Locale.Language.Swedish][bestFileToDownload] = Proxy.Media(subFile, ext=filetype)
           except Exception, e:
             Log('Update: Failed to update. Error: %s' % repr(e))
+    else:
+      Log("Update: No subtitle good enough was found")
