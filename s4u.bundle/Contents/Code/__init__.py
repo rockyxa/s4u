@@ -63,7 +63,8 @@ class s4uAgentMovies(Agent.Movies):
     Log("Update: xmlRes: %s" % xmlRes)
     for sub in xmlRes.xpath("//sub"):
       releasename = sub.xpath("rls")[0].text
-      file = sub.xpath("download_zip")[0].text
+      file = sub.xpath("download_file")[0].text
+      filetype = sub.xpath("file_type")[0].text
       Log("Releasename: %s" % releasename)
       Log("File: %s" % file)
       score = 100 - self.scoreHeuristic(releasename,releasepath)
@@ -77,37 +78,20 @@ class s4uAgentMovies(Agent.Movies):
     Log("Best score: %s" % bestScore)
     Log("Releasename: %s" % bestReleaseName)
     Log("File to download: %s" % bestFileToDownload)
-    
-    #Log("Zip-tester")
-    #file = zipfile.ZipFile("samples/sample.zip", "r")
-
-    # list filenames
-    #for name in file.namelist():
-      #print name,
-    #print
+    Log("Filetype: %s" % filetype)
 	
 	#DOWNLOAD FILE
     if bestScore > 85: #JUSTERA DETTA SEN
       try:
-        #subFile = HTTP.Request(bestFileToDownload, headers={'Accept-Encoding':''}).content
-        #myfile = open("/Users/Johan/Downloads/ziptest/testit.txt", "wb")
-        #Log('Update: Downloading sub from %s' % bestFileToDownload)
-        #Log('Update: Downloaded file %s' % myfile)
-        pass        
+        Log('Update: Downloading sub from %s' % bestFileToDownload)  
+        subFile = HTTP.Request(bestFileToDownload)    
+        #subFile = HTTP.Request("http://www.rockyxa.se/tester/text.srt",headers={'Accept-Encoding':''}).content         
       except:
-        #Log('Update: Failed to download sub from %s' % bestFileToDownload)      
-        pass
-      try:
-        #subData = Archive.GzipDecompress(subFile)
-        pass
-      except:
-        #Log('Update: Misslyckades med uppackning')
-        pass
-          
+        Log('Update: Failed to download sub from %s' % bestFileToDownload)    
+                  
       for i in media.items:
         for p in i.parts:
-          pass
-          #try:
-            #p.subtitles[Locale.Language.Swedish][subUrl] = Proxy.Media(subData, ext="srt")
-          #except:
-            #Log('Update: Misslyckades att uppdatera')
+          try:
+            p.subtitles[Locale.Language.Swedish][bestFileToDownload] = Proxy.Media(subFile, ext=filetype)
+          except Exception, e:
+            Log('Update: Failed to update. Error: %s' % repr(e))
