@@ -6,6 +6,12 @@
 
 \f0\fs24 \cf0 Metadata Agent for Plex\
 \
-First draft\
+Works fine for movies that has an IMDB-id at s4u.se.\
+\
+Uses imdb-id and heuristics to match releasename to get the best possible matching subtitle.\
+\
+TODO:\
+TV-shows\
+Fallback if no IMDB-id is found\
 \
 Place in /User/Library/Application Support/Plex Media Server/Plug-ins}
